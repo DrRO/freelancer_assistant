@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/gemini_service.dart';
 
+import 'package:flutter/material.dart';
+
 class RateCalculatorScreen extends StatefulWidget {
   const RateCalculatorScreen({super.key});
 
@@ -23,7 +25,10 @@ class _RateCalculatorScreenState extends State<RateCalculatorScreen> {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _generatedRate = ''; // Clear previous results
+    });
 
     final prompt = """
     Suggest an appropriate freelance rate for:
@@ -41,13 +46,22 @@ class _RateCalculatorScreenState extends State<RateCalculatorScreen> {
     Include 1-2 sentences justifying the range.
     """;
 
-    final response = await GeminiService.generateContent(prompt);
-    final rate = _extractRate(response);
+    try {
+      final response = await GeminiService.generateContent(prompt);
+      final rate = _extractRate(response);
 
-    setState(() {
-      _generatedRate = rate;
-      _isLoading = false;
-    });
+      setState(() {
+        _generatedRate = rate;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   String _extractRate(String response) {
@@ -132,9 +146,13 @@ class _RateCalculatorScreenState extends State<RateCalculatorScreen> {
               const SizedBox(height: 24),
               if (_generatedRate.isNotEmpty)
                 Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(
+                    child: SelectableText(
                       _generatedRate,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
