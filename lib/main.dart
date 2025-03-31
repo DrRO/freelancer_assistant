@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               ProposalGeneratorScreen(),
               RateCalculatorScreen(),
-              EmailAssistantScreen(),
+              EmailAssistantPage(),
             ],
           ),
         ),

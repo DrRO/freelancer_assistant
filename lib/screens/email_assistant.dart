@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/gemini_service.dart';
 
-class EmailAssistantScreen extends StatefulWidget {
-  const EmailAssistantScreen({super.key});
+class EmailAssistantPage extends StatefulWidget {
+  const EmailAssistantPage({super.key});
 
   @override
-  State<EmailAssistantScreen> createState() => _EmailAssistantScreenState();
+  State<EmailAssistantPage> createState() => _EmailAssistantPageState();
 }
 
-class _EmailAssistantScreenState extends State<EmailAssistantScreen> {
+class _EmailAssistantPageState extends State<EmailAssistantPage> {
   final _formKey = GlobalKey<FormState>();
   final _subjectController = TextEditingController();
   final _keyPointsController = TextEditingController();
